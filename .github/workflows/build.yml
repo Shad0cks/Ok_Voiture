@@ -1,0 +1,80 @@
+on: [push]
+jobs:
+  back_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3.2.0
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: |
+          cd back/ 
+          npm install
+        env:
+          CI: true
+
+      - name: Generate build
+        run: |
+          cd back/ 
+          npm run build
+
+  front_build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3.2.0
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: |
+          cd ui/
+          npm install
+        env:
+          CI: true
+
+      - name: Generate build
+        run: |
+          cd ui/
+          npm run build
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3.2.0
+
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: Install dependencies
+        run: |
+          cd back/
+          npm install
+          cd ../ui/
+          npm install
+        env:
+          CI: true
+
+      - name: Prettier
+        run: |
+          cd back/
+          npm run check-format
+          cd ../ui/
+          npm run check-format
+
+      - name: ESLint
+        run: |
+          cd back/
+          npm run lint
+          cd ../ui/
+          npm run lint

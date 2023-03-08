@@ -1,0 +1,45 @@
+version: '3.9'
+services:
+  db:
+    container_name: ok-voiture-db
+    image: postgres:14.5-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - '${POSTGRES_PORT}:${POSTGRES_PORT}'
+    networks:
+      - default
+
+  back:
+    container_name: ok-voiture-back
+    build:
+      context: back/.
+      dockerfile: ../docker/back.Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - default
+    depends_on:
+      - db
+
+  front:
+    container_name: ok-voiture-front
+    build:
+      context: ui/.
+      dockerfile: ../docker/front.Dockerfile
+    ports:
+      - 3000:3000
+    networks:
+      - default
+
+networks:
+  default:
+    external: false
+    name: app-network
+
+volumes:
+  db:
+    driver: local
