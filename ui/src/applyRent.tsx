@@ -3,9 +3,11 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { carDTO } from "./dtos/car.dto";
 import { addCar } from "./services/postCar";
 import { BlobServiceClient } from "@azure/storage-blob";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TSSnackbar from "./components/ui/TSSsnakbar";
 import useSnackbar from "./components/hooks/useSnakbar";
+import { Autocomplete, Box, TextField } from "@mui/material";
+import { geoDTO } from "./dtos/geo.dto";
 
 function ApplyRent() {
   let url: string | undefined = undefined;
@@ -13,6 +15,20 @@ function ApplyRent() {
 
   const { register, reset, handleSubmit } = useForm<carDTO>();
   const [image, setImage] = useState<File>();
+  const [geoList, setGeoList] = useState<geoDTO[]>();
+
+  const fetchGeoList = async () => {
+    fetch("https://geo.api.gouv.fr/departements/987/communes?&fields=nom")
+      .then((res) => res.json())
+      .then((result) => {
+        setGeoList(result);
+      });
+  };
+
+  useEffect(() => {
+    fetchGeoList();
+  }, []);
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files?.length === 1)
       setImage(event.target.files[0]);
@@ -152,21 +168,33 @@ function ApplyRent() {
             />
           </div>
 
-          <div className="sm:col-span-2">
-            <label
-              htmlFor="City"
-              className="mb-2 inline-block text-sm text-gray-800 sm:text-base"
-            >
-              City*
-            </label>
-            <input
-              id="City"
-              {...register("City")}
-              name="City"
-              className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-              required
-            />
-          </div>
+          <Autocomplete
+            id="City"
+            className="sm:col-span-2  rounded border bg-gray-50  text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
+            options={geoList!}
+            autoHighlight
+            getOptionLabel={(option) => option.nom}
+            renderOption={(props, option) => (
+              <Box component="li" {...props}>
+                {option.nom} ({option.code})
+              </Box>
+            )}
+            renderInput={(params) => (
+              <TextField
+                sx={{
+                  "& fieldset": { border: "none" },
+                }}
+                label="Choose a city"
+                {...params}
+                {...register("City")}
+                className="  bg-gray-50"
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: "autocomplete", // disable autocomplete and autofill
+                }}
+              />
+            )}
+          />
 
           <div>
             <label
