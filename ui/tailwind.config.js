@@ -2,12 +2,7 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {
-      gridTemplateColumns: {
-        // responsive home grid
-        respGrid: "repeat(4, minmax(100px, 500px))",
-      },
-    },
+    extend: {},
   },
   plugins: [],
 };
