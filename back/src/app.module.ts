@@ -4,6 +4,7 @@ import { CarService } from './car.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CarEntity } from './entities/car.entity';
+import { ReservationEntity } from './entities/reservation.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { CarEntity } from './entities/car.entity';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([CarEntity]),
+    TypeOrmModule.forFeature([CarEntity, ReservationEntity]),
   ],
   controllers: [AppController],
   providers: [CarService],

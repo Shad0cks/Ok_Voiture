@@ -1,6 +1,7 @@
-import { Controller, Get, Body, Post } from '@nestjs/common';
+import { Controller, Get, Body, Post, Param } from '@nestjs/common';
 import { CarService } from './car.service';
 import { carDTO } from './dtos/car.dto';
+import { ReserveDateDTO } from './dtos/reserveDate.dto';
 
 @Controller()
 export class AppController {
@@ -14,5 +15,15 @@ export class AppController {
   @Get('cars')
   async getCarsList(): Promise<carDTO[]> {
     return this.CarService.getAllCars();
+  }
+
+  @Post(':id/book')
+  async addBooking(@Param('id') id: number, @Body() newBooking: ReserveDateDTO) {
+    return this.CarService.book(newBooking, id);
+  }
+
+  @Get(':id/book')
+  async GetBookings(@Param('id') id: number): Promise<ReserveDateDTO[]> {
+    return this.CarService.GetBooks(id);
   }
 }

@@ -1,7 +1,15 @@
+import { Fragment, useRef, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 import { carDTO } from "../../dtos/car.dto";
+import OwnCalendar from "./calendar";
+import { SnackbarHook } from '../hooks/useSnakbar';
 
-function ItemCar({ rentCar }: { rentCar: carDTO }) {
+function ItemCar({ rentCar, snackbar }: { rentCar: carDTO, snackbar: SnackbarHook }) {
+
+  let [modalIsOpen, setModalIsOpen] = useState(false)
+
   return (
+    <>
     <div className="mb-5 flex flex-col sm:mb-8 sm:divide-y  ">
       <div className="py-5 sm:py-8">
         <div className="flex flex-wrap gap-4 sm:py-2.5 lg:gap-6">
@@ -62,7 +70,7 @@ function ItemCar({ rentCar }: { rentCar: carDTO }) {
               <span className="block font-bold text-gray-800 md:text-lg">
                 $ {rentCar.price} / day
               </span>
-              <button className="inline-block rounded bg-indigo-500 px-8 py-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base mt-5">
+              <button onClick={() => setModalIsOpen(true)} className="inline-block rounded bg-indigo-500 px-8 py-2 text-center text-sm font-semibold text-white outline-none ring-indigo-300 transition duration-100 hover:bg-indigo-600 focus-visible:ring active:bg-indigo-700 md:text-base mt-5">
                 Rent
               </button>
             </div>
@@ -70,6 +78,56 @@ function ItemCar({ rentCar }: { rentCar: carDTO }) {
         </div>
       </div>
     </div>
+    <Transition appear show={modalIsOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={() => setModalIsOpen(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900 text-center"
+                  >
+                    Planning your rent
+                  </Dialog.Title>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-500">
+                      Your rent can be cancel at any time by an administrator, enjoy beautiful cars
+                    </p>
+                  </div>
+
+                  <div className="mt-4">
+                    <OwnCalendar rentCar={rentCar} snackbar={snackbar}/>
+                    
+                  </div>
+                 
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+  </>
   );
 }
 

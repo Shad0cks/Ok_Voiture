@@ -7,12 +7,16 @@ import { carDTO } from './dtos/car.dto';
 import { CarEntity } from './entities/car.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ReserveDateDTO } from './dtos/reserveDate.dto';
+import { ReservationEntity } from './entities/reservation.entity';
 
 @Injectable()
 export class CarService {
   constructor(
     @InjectRepository(CarEntity)
     private carRepository: Repository<CarEntity>,
+    @InjectRepository(ReservationEntity)
+    private booksRepository: Repository<ReservationEntity>,
   ) {}
 
   validateString = (newInputCar: carDTO) => {
@@ -63,5 +67,36 @@ export class CarService {
   async getAllCars(): Promise<carDTO[]> {
     const allChannels = await this.carRepository.find();
     return allChannels;
+  }
+
+  async book(newBooking: ReserveDateDTO, carID: number): Promise<ReservationEntity> {
+    const newbook = new ReserveDateDTO();
+    newbook.carId = carID;
+    newbook.end = newBooking.end;
+    newbook.start = newBooking.start
+    try {
+      return await this.booksRepository.save(newbook);
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async GetBooks(carID: number): Promise<ReserveDateDTO[]> {
+    const allBooks = await this.booksRepository.find({
+      where: {
+        carId: carID,
+      },
+      relations: {
+        car: true
+      },
+      select: { 
+        id: true,
+        carId: true,
+        start: true,
+        end: true
+      } 
+  });
+  console.log(allBooks)
+    return allBooks;
   }
 }
