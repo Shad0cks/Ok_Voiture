@@ -7,6 +7,7 @@ export interface carDTO {
   City: string;
   description: string;
   carPic: string;
+  creation_date: Date;
   price: number;
   start: Date;
   end: Date;

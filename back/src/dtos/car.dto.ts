@@ -9,5 +9,6 @@ export class carDTO {
   carPic: string;
   price: number;
   start: Date;
+  creation_date: Date;
   end: Date;
 }

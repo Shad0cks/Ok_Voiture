@@ -16,6 +16,9 @@ export class CarEntity {
   @Column()
   Model: string;
 
+  @CreateDateColumn()
+  creation_date: Date;
+
   @Column()
   email: string;
 

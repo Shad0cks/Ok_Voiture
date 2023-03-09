@@ -10,4 +10,9 @@ export class AppController {
   async newCarAction(@Body() newCar: carDTO) {
     return this.CarService.createRentCar(newCar);
   }
+
+  @Get('cars')
+  async getCarsList(): Promise<carDTO[]> {
+    return this.CarService.getAllCars();
+  }
 }

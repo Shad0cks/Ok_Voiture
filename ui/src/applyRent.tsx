@@ -74,7 +74,7 @@ function ApplyRent() {
           blobServiceClient.getContainerClient("carspics");
         const blobClient = containerClient.getBlockBlobClient(newFile.name);
         await blobClient.uploadData(newFile);
-        url = `https://okvoiture.blob.core.windows.net/ok-voiture/${time}${fileExt}`;
+        url = `https://okvoiture.blob.core.windows.net/carspics/${time}${fileExt}`;
         resolve(img);
       };
       img.src = URL.createObjectURL(pic);
@@ -108,6 +108,7 @@ function ApplyRent() {
               First name*
             </label>
             <input
+              maxLength={12}
               id="name"
               className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
               {...register("name")}
@@ -140,6 +141,7 @@ function ApplyRent() {
               Model*
             </label>
             <input
+              maxLength={15}
               id="Model"
               {...register("Model")}
               name="Model"
@@ -160,7 +162,7 @@ function ApplyRent() {
               id="Year"
               type="number"
               placeholder="YYYY"
-              min="2017"
+              min="1500"
               max="2100"
               name="Year"
               className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
@@ -171,7 +173,7 @@ function ApplyRent() {
           <Autocomplete
             id="City"
             className="sm:col-span-2  rounded border bg-gray-50  text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
-            options={geoList!}
+            options={geoList ? geoList : []}
             autoHighlight
             getOptionLabel={(option) => option.nom}
             renderOption={(props, option) => (
@@ -235,9 +237,10 @@ function ApplyRent() {
               htmlFor="description"
               className="mb-2 inline-block text-sm text-gray-800 sm:text-base"
             >
-              Description*
+              Brief Description*
             </label>
             <textarea
+              maxLength={150}
               id="description"
               {...register("description")}
               name="description"
