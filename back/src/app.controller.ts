@@ -17,6 +17,11 @@ export class AppController {
     return this.CarService.getAllCars();
   }
 
+  @Get(':id/carsAvailable')
+  async isAvaible(@Param('id') id: number): Promise<boolean> {
+    return this.CarService.carIsAvailable(id);
+  }
+
   @Post(':id/book')
   async addBooking(
     @Param('id') id: number,

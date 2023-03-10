@@ -30,11 +30,7 @@ export default function TSSnackbar(props: SnackbarProps) {
 
   return (
     <div>
-      <Snackbar
-        autoHideDuration={10000}
-        onClose={handleClose}
-        open={props.open}
-      >
+      <Snackbar autoHideDuration={2000} onClose={handleClose} open={props.open}>
         <Alert
           onClose={handleClose}
           severity={props.severity}

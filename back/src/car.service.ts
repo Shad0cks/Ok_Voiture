@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ReserveDateDTO } from './dtos/reserveDate.dto';
 import { ReservationEntity } from './entities/reservation.entity';
+import * as moment from 'moment';
 
 @Injectable()
 export class CarService {
@@ -19,22 +20,6 @@ export class CarService {
     private booksRepository: Repository<ReservationEntity>,
   ) {}
 
-  validateString = (newInputCar: carDTO) => {
-    if (newInputCar.name.length <= 0 || newInputCar.name.length > 12)
-      return false;
-    else if (newInputCar.Model.length <= 0 || newInputCar.Model.length > 15)
-      return false;
-    else if (newInputCar.City.length <= 0 || newInputCar.City.length > 15)
-      return false;
-    else if (
-      newInputCar.description.length <= 0 ||
-      newInputCar.description.length > 150
-    )
-      return false;
-    else if (newInputCar.carPic.length <= 0) return false;
-    return true;
-  };
-
   validateEmail = (email) => {
     return email.match(
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -43,8 +28,6 @@ export class CarService {
 
   async createRentCar(newInputCar: carDTO): Promise<CarEntity> {
     const newRentCar = new carDTO();
-    if (!this.validateString(newInputCar))
-      throw new BadRequestException('Something went wrong with the form');
     newRentCar.name = newInputCar.name;
     newRentCar.Model = newInputCar.Model;
     if (this.validateEmail(newInputCar.email))
@@ -69,19 +52,83 @@ export class CarService {
     return allChannels;
   }
 
+  async getCarById(id: number): Promise<carDTO> {
+    const car = await this.carRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+    return car;
+  }
+
   async book(
     newBooking: ReserveDateDTO,
     carID: number,
   ): Promise<ReservationEntity> {
     const newbook = new ReserveDateDTO();
+    let rentCar: carDTO;
+    try {
+      rentCar = await this.getCarById(carID);
+    } catch (error) {
+      throw new BadRequestException('Car not found');
+    }
+
     newbook.carId = carID;
     newbook.end = newBooking.end;
     newbook.start = newBooking.start;
+    const books: ReserveDateDTO[] = await this.GetBooks(carID);
+
+    const wantedStart = moment(newbook.start);
+    const wantedEnd = moment(newbook.end);
+    if (wantedStart.isSame(wantedEnd))
+      throw new BadRequestException('Cannot book only one day');
+    const limitStart = moment(rentCar.start).subtract(1, 'day');
+    const limitEnd = moment(rentCar.end).subtract(1, 'day');
+
+    for (let i = 0; i < books.length; i++) {
+      const bookStart = moment(books[i].start);
+      const bookEnd = moment(books[i].end);
+
+      if (
+        wantedStart.isBetween(books[i].start, books[i].end) ||
+        wantedEnd.isBetween(books[i].start, books[i].end) ||
+        bookStart.isBetween(newbook.start, newbook.end) ||
+        bookEnd.isBetween(newbook.start, newbook.end) ||
+        bookEnd.isSame(wantedEnd) ||
+        bookStart.isSame(wantedStart) ||
+        limitStart.isAfter(wantedStart) ||
+        limitEnd.isBefore(wantedEnd)
+      )
+        throw new BadRequestException('Wrong booking Dates');
+    }
+
     try {
       return await this.booksRepository.save(newbook);
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  async carIsAvailable(carID: number): Promise<boolean> {
+    const books: ReserveDateDTO[] = await this.GetBooks(carID);
+    let rentCar: carDTO;
+    try {
+      rentCar = await this.getCarById(carID);
+    } catch (error) {
+      throw new BadRequestException('Car not found');
+    }
+    const today = Date.now();
+    const limitStart = moment(rentCar.start).subtract(1, 'day');
+    const todayMo = moment(today).subtract(1, 'day');
+
+    if (limitStart.isAfter(todayMo)) return false;
+
+    for (let i = 0; i < books.length; i++) {
+      const bookStart = moment(books[i].start).subtract(1, 'day');
+      const bookEnd = moment(books[i].end).subtract(1, 'day');
+      if (todayMo.isBetween(bookStart, bookEnd)) return false;
+    }
+    return true;
   }
 
   async GetBooks(carID: number): Promise<ReserveDateDTO[]> {
@@ -99,7 +146,6 @@ export class CarService {
         end: true,
       },
     });
-    console.log(allBooks);
     return allBooks;
   }
 }

@@ -21,15 +21,17 @@ export function addReservation(
       if (res.ok) {
         snackbar.setMessage("Booking successfuly reserved !");
         snackbar.setSeverity("success");
+        snackbar.setOpen(true);
       } else {
-        snackbar.setMessage("Error while booking the rent !");
+        snackbar.setMessage("Invalid dates !");
         snackbar.setSeverity("error");
+        snackbar.setOpen(true);
       }
     })
     .catch((err) => {
       snackbar.setMessage("Error while booking the rent !");
       snackbar.setSeverity("error");
+      snackbar.setOpen(true);
       console.error(err);
     });
-  snackbar.setOpen(true);
 }

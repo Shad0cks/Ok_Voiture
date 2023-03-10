@@ -73,7 +73,9 @@ function ApplyRent() {
         const containerClient =
           blobServiceClient.getContainerClient("carspics");
         const blobClient = containerClient.getBlockBlobClient(newFile.name);
+
         await blobClient.uploadData(newFile);
+
         url = `https://okvoiture.blob.core.windows.net/carspics/${time}${fileExt}`;
         resolve(img);
       };

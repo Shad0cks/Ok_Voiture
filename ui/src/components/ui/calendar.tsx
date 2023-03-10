@@ -23,27 +23,28 @@ function OwnCalendar({
   const [bookList, setBookList] = useState<ReservedDateDTO[]>();
   const [date, setDate] = useState<Date[]>();
 
+  const startMoment = moment(rentCar.start).subtract(1, "day");
+  const endMoment = moment(rentCar.end).subtract(1, "day");
+
   useEffect(() => {
     GetReservations(rentCar.id, setBookList, snackbar); // eslint-disable-next-line
   }, []);
 
-  function isDateInRange(date: Date, startDate: Date, endDate: Date) {
-    const cdate1 = moment(date, "DD-MM-YYYY");
-    const cdate2 = moment(startDate, "DD-MM-YYYY");
-    const cdate3 = moment(endDate, "DD-MM-YYYY");
-    return cdate1.isBetween(cdate2, cdate3);
+  function checkSame(date1: moment.Moment, date2: moment.Moment): boolean {
+    return (
+      date1.date() === date2.date() &&
+      date1.year() === date2.year() &&
+      date1.month() === date2.month()
+    );
   }
 
   const dateTemplate = (date: any) => {
     if (!bookList) return date.day;
-
     for (let i = 0; i < bookList.length; i++) {
-      const s = new Date(bookList[i].start);
-      const en = new Date(bookList[i].end);
-      const curr = new Date(date.year, date.month, date.day);
-
-      if (isDateInRange(curr, s, en) || s === curr || en === curr) {
-        console.log(date);
+      const s = moment(bookList[i].start);
+      const en = moment(bookList[i].end);
+      const curr = moment(new Date(date.year, date.month, date.day));
+      if (curr.isBetween(s, en) || checkSame(s, curr) || checkSame(curr, en)) {
         date.selectable = false;
         return (
           <strong style={{ textDecoration: "line-through" }}>{date.day}</strong>
@@ -52,21 +53,6 @@ function OwnCalendar({
     }
     return date.day;
   };
-
-  function cpmDateInf(date1: Date, date2: Date) {
-    const formDate1 = moment(date1).format("DD-MM-YYYY");
-    const formDate2 = moment(date2).format("DD-MM-YYYY");
-
-    const cdate1 = moment(formDate1, "DD-MM-YYYY");
-    const cdate2 = moment(formDate2, "DD-MM-YYYY");
-    if (cdate1.isBefore(cdate2)) {
-      return true;
-    } else if (cdate2.isBefore(cdate1)) {
-      return false;
-    } else {
-      return false;
-    }
-  }
 
   const setDates = (e: CalendarChangeEvent) => {
     if (
@@ -81,18 +67,23 @@ function OwnCalendar({
   const tryBook = () => {
     if (!date || date.length !== 2) return;
 
-    if (cpmDateInf(date[0], date[1])) {
+    const cdate1 = moment(date[0]);
+    const cdate2 = moment(date[1]);
+
+    if (cdate1.isBefore(cdate2)) {
       addReservation(
         rentCar.id,
-        { start: date[0], end: date[1], carId: rentCar.id },
+        { start: cdate1.toDate(), end: cdate2.toDate(), carId: rentCar.id },
+        snackbar
+      );
+    } else if (cdate2.isBefore(cdate1)) {
+      addReservation(
+        rentCar.id,
+        { start: cdate2.toDate(), end: cdate1.toDate(), carId: rentCar.id },
         snackbar
       );
     } else {
-      addReservation(
-        rentCar.id,
-        { start: date[1], end: date[0], carId: rentCar.id },
-        snackbar
-      );
+      return;
     }
     setModalIsOpen(false);
   };
@@ -108,11 +99,11 @@ function OwnCalendar({
                 value={date}
                 onChange={(e: any) => setDates(e)}
                 inline
-                maxDate={new Date(rentCar.end)}
+                maxDate={endMoment.toDate()}
                 minDate={
-                  cpmDateInf(new Date(), new Date(rentCar.start))
-                    ? new Date(rentCar.start)
-                    : new Date()
+                  startMoment.isBefore(moment(new Date()))
+                    ? new Date()
+                    : startMoment.toDate()
                 }
                 selectionMode="multiple"
                 maxDateCount={2}
