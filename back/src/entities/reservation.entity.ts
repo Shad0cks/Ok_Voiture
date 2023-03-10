@@ -1,29 +1,28 @@
 import {
-    ManyToOne,
-    Column,
-    Entity,
-    PrimaryGeneratedColumn,
-    JoinColumn
-  } from 'typeorm';
+  ManyToOne,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 
 import { CarEntity } from './car.entity';
-  
-  @Entity()
-  export class ReservationEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    @ManyToOne(() => CarEntity)
-    @JoinColumn({ name: "carId" })
-    car: CarEntity;
 
-    @Column({ name: "carId" })
-    carId: number; 
+@Entity()
+export class ReservationEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    start: Date;
+  @ManyToOne(() => CarEntity)
+  @JoinColumn({ name: 'carId' })
+  car: CarEntity;
 
-    @Column()
-    end: Date;
-  }
-  
+  @Column({ name: 'carId' })
+  carId: number;
+
+  @Column()
+  start: Date;
+
+  @Column()
+  end: Date;
+}

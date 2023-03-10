@@ -18,7 +18,10 @@ export class AppController {
   }
 
   @Post(':id/book')
-  async addBooking(@Param('id') id: number, @Body() newBooking: ReserveDateDTO) {
+  async addBooking(
+    @Param('id') id: number,
+    @Body() newBooking: ReserveDateDTO,
+  ) {
     return this.CarService.book(newBooking, id);
   }
 

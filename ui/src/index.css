@@ -2,6 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.p-datepicker{
-    overflow: hidden !important;
+.p-datepicker {
+  overflow: hidden !important;
 }

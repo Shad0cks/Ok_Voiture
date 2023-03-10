@@ -22,7 +22,9 @@ function ListCars({ snackbar }: { snackbar: SnackbarHook }) {
         {carsList && carsList.length > 0
           ? carsList
               .sort((a, b) => (a.price < b.price ? -1 : 1))
-              .map((e: carDTO, i) => <ItemCar snackbar={snackbar} key={i} rentCar={e} />)
+              .map((e: carDTO, i) => (
+                <ItemCar snackbar={snackbar} key={i} rentCar={e} />
+              ))
           : null}
       </div>
     </div>

@@ -1,16 +1,15 @@
 import { IsNotEmpty, IsDate } from 'class-validator';
 
 export class ReserveDateDTO {
-    id: number;
+  id: number;
 
-    carId: number;
+  carId: number;
 
-    @IsNotEmpty()
-    @IsDate()
-    start: Date;
+  @IsNotEmpty()
+  @IsDate()
+  start: Date;
 
-    @IsNotEmpty()
-    @IsDate()
-    end: Date;
-  }
-  
+  @IsNotEmpty()
+  @IsDate()
+  end: Date;
+}

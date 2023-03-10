@@ -69,11 +69,14 @@ export class CarService {
     return allChannels;
   }
 
-  async book(newBooking: ReserveDateDTO, carID: number): Promise<ReservationEntity> {
+  async book(
+    newBooking: ReserveDateDTO,
+    carID: number,
+  ): Promise<ReservationEntity> {
     const newbook = new ReserveDateDTO();
     newbook.carId = carID;
     newbook.end = newBooking.end;
-    newbook.start = newBooking.start
+    newbook.start = newBooking.start;
     try {
       return await this.booksRepository.save(newbook);
     } catch (error) {
@@ -87,16 +90,16 @@ export class CarService {
         carId: carID,
       },
       relations: {
-        car: true
+        car: true,
       },
-      select: { 
+      select: {
         id: true,
         carId: true,
         start: true,
-        end: true
-      } 
-  });
-  console.log(allBooks)
+        end: true,
+      },
+    });
+    console.log(allBooks);
     return allBooks;
   }
 }
