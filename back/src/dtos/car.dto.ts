@@ -1,12 +1,10 @@
 import {
   IsNotEmpty,
-  IsDate,
   IsDateString,
-  isString,
-  isNotEmpty,
   MaxLength,
   IsString,
-  isNumber,
+  IsEmail,
+  Matches,
 } from 'class-validator';
 
 export class carDTO {
@@ -14,16 +12,19 @@ export class carDTO {
 
   @IsNotEmpty()
   @IsString()
+  @Matches(/^[a-zA-Z0-9\s]+$/)
   @MaxLength(12)
   name: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(15)
+  @Matches(/^[a-zA-Z0-9\s]+$/)
+  @MaxLength(25)
   Model: string;
 
   @IsNotEmpty()
   @IsString()
+  @IsEmail()
   email: string;
 
   Year: number;

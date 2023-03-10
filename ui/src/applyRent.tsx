@@ -39,7 +39,6 @@ function ApplyRent() {
     if (isImage) await updateImg(image);
     if (url && isImage) {
       data.carPic = url;
-      console.log(data);
       addCar(data, snackbar);
       reset();
     } else {
@@ -143,7 +142,7 @@ function ApplyRent() {
               Model*
             </label>
             <input
-              maxLength={15}
+              maxLength={25}
               id="Model"
               {...register("Model")}
               name="Model"
@@ -185,6 +184,7 @@ function ApplyRent() {
             )}
             renderInput={(params) => (
               <TextField
+                required
                 sx={{
                   "& fieldset": { border: "none" },
                 }}

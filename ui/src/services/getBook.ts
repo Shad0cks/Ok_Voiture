@@ -21,7 +21,6 @@ export function GetReservations(
     .then(async (res) => {
       if (res.ok) {
         res.json().then((e) => {
-          console.log(e);
           setBookList(e);
         });
       } else {

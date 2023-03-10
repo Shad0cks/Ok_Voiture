@@ -1,7 +1,9 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { carDTO } from './dtos/car.dto';
 import { CarEntity } from './entities/car.entity';
@@ -147,5 +149,48 @@ export class CarService {
       },
     });
     return allBooks;
+  }
+
+  async GetBookById(bookId: number): Promise<ReserveDateDTO> {
+    const book = await this.booksRepository.findOne({
+      where: {
+        id: bookId,
+      },
+    });
+    return book;
+  }
+
+  async CancelBooking(bookID: number, password: string) {
+    if (password !== process.env.ADMIN_PASSWORD)
+      throw new ForbiddenException('access deny');
+    try {
+      const book = await this.GetBookById(bookID);
+      await this.booksRepository.delete(book);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException('Friend not found');
+      }
+    }
+  }
+
+  async checkPassWord(password: string): Promise<{ res: boolean }> {
+    return { res: password === process.env.ADMIN_PASSWORD };
+  }
+
+  async getAllData(
+    password: string,
+  ): Promise<{ car: carDTO; books: ReserveDateDTO[] }[]> {
+    if (password !== process.env.ADMIN_PASSWORD)
+      throw new ForbiddenException('access deny');
+    const allRentCar: carDTO[] = await this.getAllCars();
+    const ret: { car: carDTO; books: ReserveDateDTO[] }[] = [];
+
+    for (let i = 0; i < allRentCar.length; i++) {
+      const allReservation: ReserveDateDTO[] = await this.GetBooks(
+        allRentCar[i].id,
+      );
+      ret.push({ car: allRentCar[i], books: allReservation });
+    }
+    return ret;
   }
 }

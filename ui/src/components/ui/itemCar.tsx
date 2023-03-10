@@ -40,12 +40,9 @@ function ItemCar({
 
             <div className="flex flex-1 flex-col justify-evenly">
               <div>
-                <a
-                  href="/"
-                  className="mb-1 inline-block text-lg font-bold text-gray-800 transition duration-100 hover:text-gray-500 lg:text-xl"
-                >
+                <p className="mb-1 inline-block text-lg font-bold text-gray-800  lg:text-xl">
                   {rentCar.Model}
-                </a>
+                </p>
 
                 <span className="block text-gray-500">
                   Years: {rentCar.Year}
@@ -148,8 +145,10 @@ function ItemCar({
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Your rent can be cancel at any time by an administrator,
-                      enjoy beautiful cars
+                      Your rental can be cancelled at any time by an
+                      administrator.
+                      <br />
+                      Select the rental interval - min 2 days
                     </p>
                   </div>
 

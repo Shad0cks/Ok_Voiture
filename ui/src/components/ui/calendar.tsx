@@ -23,8 +23,8 @@ function OwnCalendar({
   const [bookList, setBookList] = useState<ReservedDateDTO[]>();
   const [date, setDate] = useState<Date[]>();
 
-  const startMoment = moment(rentCar.start).subtract(1, "day");
-  const endMoment = moment(rentCar.end).subtract(1, "day");
+  const startMoment = moment(rentCar.start);
+  const endMoment = moment(rentCar.end);
 
   useEffect(() => {
     GetReservations(rentCar.id, setBookList, snackbar); // eslint-disable-next-line
@@ -73,13 +73,23 @@ function OwnCalendar({
     if (cdate1.isBefore(cdate2)) {
       addReservation(
         rentCar.id,
-        { start: cdate1.toDate(), end: cdate2.toDate(), carId: rentCar.id },
+        {
+          start: cdate1.toDate(),
+          end: cdate2.toDate(),
+          carId: rentCar.id,
+          id: undefined,
+        },
         snackbar
       );
     } else if (cdate2.isBefore(cdate1)) {
       addReservation(
         rentCar.id,
-        { start: cdate2.toDate(), end: cdate1.toDate(), carId: rentCar.id },
+        {
+          start: cdate2.toDate(),
+          end: cdate1.toDate(),
+          carId: rentCar.id,
+          id: undefined,
+        },
         snackbar
       );
     } else {
