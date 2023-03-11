@@ -1,6 +1,6 @@
 #!/bin/sh
 
-serveurIP=172.20.10.2
+serveurIP=localhost
 
 echo '-----Verificaton des routes POST ET DELETE-----\n'
 
