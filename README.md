@@ -41,7 +41,7 @@ or
 
 ## Running Tests
 
-List of requests to quickly fill the database and test the different cases of your API 
+List of requests to quickly fill the database and test the different cases of the API 
 
 ```bash
   sh test.sh
