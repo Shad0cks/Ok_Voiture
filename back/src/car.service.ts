@@ -56,7 +56,7 @@ export class CarService {
     newRentCar.price = newInputCar.price;
     const wantedStart = moment(newInputCar.start);
     const wantedEnd = moment(newInputCar.end);
-    if (wantedEnd.isBefore(wantedStart) || wantedEnd.isSame(wantedStart))
+    if (wantedEnd.isBefore(wantedStart) || this.checkSame(wantedEnd, wantedStart))
       throw new BadRequestException('Wrong date');
     newRentCar.start = newInputCar.start;
     newRentCar.end = newInputCar.end;
@@ -81,6 +81,14 @@ export class CarService {
     return car;
   }
 
+  checkSame(date1: moment.Moment, date2: moment.Moment): boolean {
+    return (
+      date1.date() === date2.date() &&
+      date1.year() === date2.year() &&
+      date1.month() === date2.month()
+    );
+  }
+
   async book(
     newBooking: ReserveDateDTO,
     carID: number,
@@ -89,10 +97,11 @@ export class CarService {
     let rentCar: carDTO;
     try {
       rentCar = await this.getCarById(carID);
+      if (!rentCar)
+        throw new BadRequestException('Car not found');
     } catch (error) {
       throw new BadRequestException('Car not found');
     }
-
     newbook.carId = carID;
     newbook.end = newBooking.end;
     newbook.start = newBooking.start;
@@ -100,7 +109,7 @@ export class CarService {
 
     const wantedStart = moment(newbook.start);
     const wantedEnd = moment(newbook.end);
-    if (wantedStart.isSame(wantedEnd))
+    if (this.checkSame(wantedEnd, wantedStart))
       throw new BadRequestException('Cannot book only one day');
     if (wantedEnd.isBefore(wantedStart))
       throw new BadRequestException('Date error');
@@ -116,8 +125,10 @@ export class CarService {
         wantedEnd.isBetween(books[i].start, books[i].end) ||
         bookStart.isBetween(newbook.start, newbook.end) ||
         bookEnd.isBetween(newbook.start, newbook.end) ||
-        bookEnd.isSame(wantedEnd) ||
-        bookStart.isSame(wantedStart) ||
+        this.checkSame(bookEnd, wantedEnd) ||
+        this.checkSame(bookEnd, wantedEnd) ||
+        this.checkSame(wantedStart, bookEnd) ||
+        this.checkSame(wantedEnd, bookStart) ||
         limitStart.isAfter(wantedStart) ||
         limitEnd.isBefore(wantedEnd)
       )
@@ -136,6 +147,8 @@ export class CarService {
     let rentCar: carDTO;
     try {
       rentCar = await this.getCarById(carID);
+      if (!rentCar)
+        throw new BadRequestException('Car not found');
     } catch (error) {
       throw new BadRequestException('Car not found');
     }
@@ -185,6 +198,8 @@ export class CarService {
       throw new ForbiddenException('access deny');
     try {
       const book = await this.GetBookById(bookID);
+      if (!book)
+        throw new NotFoundException('Reservation not found');
       await this.booksRepository.delete(book);
     } catch (error) {
       if (error instanceof NotFoundException) {
