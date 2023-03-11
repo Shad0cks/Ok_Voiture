@@ -25,17 +25,13 @@ function ItemCar({
         <div className="py-5 sm:py-8">
           <div className="flex flex-wrap gap-4 sm:py-2.5 lg:gap-6">
             <div className="sm:-my-2.5">
-              <a
-                href="/"
-                className="group relative block h-40 w-24 overflow-hidden rounded-lg bg-gray-100 sm:h-56 sm:w-40"
-              >
+              <div className="group relative block h-40 w-24 overflow-hidden rounded-lg bg-gray-100 sm:h-56 sm:w-40">
                 <img
                   src={rentCar.carPic}
-                  loading="lazy"
                   alt="car"
                   className="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
                 />
-              </a>
+              </div>
             </div>
 
             <div className="flex flex-1 flex-col justify-evenly">

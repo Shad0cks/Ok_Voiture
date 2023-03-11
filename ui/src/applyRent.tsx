@@ -17,6 +17,7 @@ function ApplyRent() {
   const [image, setImage] = useState<File>();
   const [geoList, setGeoList] = useState<geoDTO[]>();
 
+  //recupe les informations de l'api geo.api.gouv pour la communes 987
   const fetchGeoList = async () => {
     fetch("https://geo.api.gouv.fr/departements/987/communes?&fields=nom")
       .then((res) => res.json())
@@ -37,6 +38,7 @@ function ApplyRent() {
   const onSubmit: SubmitHandler<carDTO> = async (data: carDTO) => {
     const isImage = checkImage(image);
     if (isImage) await updateImg(image);
+    //si l'upload a reussie alors appelle la route
     if (url && isImage) {
       data.carPic = url;
       addCar(data, snackbar);
@@ -53,7 +55,7 @@ function ApplyRent() {
     if (pic === undefined || pic.type.split("/")[0] !== "image") return false;
     return true;
   }
-
+  // upload l'image sur container azure cloud
   function updateImg(pic: File | undefined) {
     if (pic === undefined) return;
     const account = process.env.REACT_APP_AZURE_ACCOUNT_NAME;

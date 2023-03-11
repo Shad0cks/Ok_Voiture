@@ -11,6 +11,7 @@ function AdminLogin() {
   const snackbar = useSnackbar();
 
   useEffect(() => {
+    //verifie si le mot de passe n'est pas deja contunue dans les cookies
     const cookiePass = Cookies.get("password");
     if (!cookiePass) return;
     CheckPassword(cookiePass)

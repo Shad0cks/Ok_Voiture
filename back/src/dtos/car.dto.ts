@@ -5,6 +5,7 @@ import {
   IsString,
   IsEmail,
   Matches,
+  IsUrl,
 } from 'class-validator';
 
 export class carDTO {
@@ -41,6 +42,7 @@ export class carDTO {
 
   @IsNotEmpty()
   @IsString()
+  @IsUrl()
   carPic: string;
 
   price: number;

@@ -38,6 +38,7 @@ function OwnCalendar({
     );
   }
 
+  //filtre les dates sur le calendrier pour rayer celle qui sont deja reserver
   const dateTemplate = (date: any) => {
     if (!bookList) return date.day;
     for (let i = 0; i < bookList.length; i++) {
@@ -69,7 +70,7 @@ function OwnCalendar({
 
     const cdate1 = moment(date[0]);
     const cdate2 = moment(date[1]);
-
+    // calcule si cdate1 et cdate2 sont les dates de debut ou de fin
     if (cdate1.isBefore(cdate2)) {
       addReservation(
         rentCar.id,

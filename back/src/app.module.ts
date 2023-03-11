@@ -9,6 +9,7 @@ import { ReservationEntity } from './entities/reservation.entity';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    //link la db
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,

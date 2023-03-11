@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsDate, IsDateString } from 'class-validator';
+import { IsNotEmpty, IsDateString } from 'class-validator';
 
 export class ReserveDateDTO {
   id: number;

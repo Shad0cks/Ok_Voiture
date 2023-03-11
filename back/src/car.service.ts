@@ -28,6 +28,14 @@ export class CarService {
     );
   };
 
+  isImageUrlValid(imageUrl: string): boolean {
+    const supportedImageExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
+    const fileExtension = imageUrl
+      .substring(imageUrl.lastIndexOf('.'))
+      .toLowerCase();
+    return supportedImageExtensions.includes(fileExtension.toLowerCase());
+  }
+
   async createRentCar(newInputCar: carDTO): Promise<CarEntity> {
     const newRentCar = new carDTO();
     newRentCar.name = newInputCar.name;
@@ -38,7 +46,9 @@ export class CarService {
     newRentCar.Year = newInputCar.Year;
     newRentCar.City = newInputCar.City;
     newRentCar.description = newInputCar.description;
-    newRentCar.carPic = newInputCar.carPic;
+    if (this.isImageUrlValid(newInputCar.carPic))
+      newRentCar.carPic = newInputCar.carPic;
+    else throw new BadRequestException('Picture failed to uplaod');
     newRentCar.price = newInputCar.price;
     newRentCar.start = newInputCar.start;
     newRentCar.end = newInputCar.end;
@@ -90,7 +100,7 @@ export class CarService {
     for (let i = 0; i < books.length; i++) {
       const bookStart = moment(books[i].start);
       const bookEnd = moment(books[i].end);
-
+      // verification que les dates voulu n'entre pas en conflie avec d'autres reservations ou des limites
       if (
         wantedStart.isBetween(books[i].start, books[i].end) ||
         wantedEnd.isBetween(books[i].start, books[i].end) ||
@@ -180,11 +190,13 @@ export class CarService {
   async getAllData(
     password: string,
   ): Promise<{ car: carDTO; books: ReserveDateDTO[] }[]> {
+    //verifie que le password dans les cookies soit toujours valide
     if (password !== process.env.ADMIN_PASSWORD)
       throw new ForbiddenException('access deny');
     const allRentCar: carDTO[] = await this.getAllCars();
     const ret: { car: carDTO; books: ReserveDateDTO[] }[] = [];
 
+    //cree une structure de donnees simple pour pouvoir les filtres dans le front
     for (let i = 0; i < allRentCar.length; i++) {
       const allReservation: ReserveDateDTO[] = await this.GetBooks(
         allRentCar[i].id,

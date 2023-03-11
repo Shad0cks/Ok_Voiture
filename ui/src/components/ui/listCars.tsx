@@ -21,14 +21,17 @@ function ListCars({ snackbar }: { snackbar: SnackbarHook }) {
               Available cars
             </h2>
           </div>
-          {carsList && carsList.length > 0
-            ? carsList
-                .sort((a, b) => (a.price < b.price ? -1 : 1))
-                .slice(0, carsNb)
-                .map((e: carDTO, i) => (
-                  <ItemCar snackbar={snackbar} key={i} rentCar={e} />
-                ))
-            : null}
+          {
+            // liste les voitures en location
+            carsList && carsList.length > 0
+              ? carsList
+                  .sort((a, b) => (a.price < b.price ? -1 : 1))
+                  .slice(0, carsNb)
+                  .map((e: carDTO, i) => (
+                    <ItemCar snackbar={snackbar} key={i} rentCar={e} />
+                  ))
+              : null
+          }
         </div>
       </div>
       {carsList && carsNb >= carsList?.length ? null : (

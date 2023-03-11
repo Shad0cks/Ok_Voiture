@@ -16,6 +16,7 @@ function AdminPanel({ snackbar }: { snackbar: SnackbarHook }) {
     getAdminData(snackbar, setRentList); // eslint-disable-next-line
   }, []);
 
+  //applique le filtre de la barre de recherche
   const filter = (car: carDTO, book: ReservedDateDTO) => {
     const sep = searchBar.indexOf(":");
     const emailFilter =
@@ -29,6 +30,7 @@ function AdminPanel({ snackbar }: { snackbar: SnackbarHook }) {
     return car.email.startsWith(emailFilter);
   };
 
+  // annule la reservation
   const cancelRent = (
     elem: { car: carDTO; books: ReservedDateDTO[] },
     book: ReservedDateDTO
