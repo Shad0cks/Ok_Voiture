@@ -105,6 +105,7 @@ function OwnCalendar({
         snackbar
       );
     }
+    setModalIsOpen(false);
   };
   return (
     <>
