@@ -6,6 +6,9 @@ import {
   IsEmail,
   Matches,
   IsUrl,
+  Min,
+  Max,
+  IsNumberString,
 } from 'class-validator';
 
 export class carDTO {
@@ -28,6 +31,7 @@ export class carDTO {
   @IsEmail()
   email: string;
 
+  @IsNumberString()
   Year: number;
 
   @IsNotEmpty()
@@ -45,6 +49,7 @@ export class carDTO {
   @IsUrl()
   carPic: string;
 
+  @IsNumberString()
   price: number;
 
   @IsNotEmpty()

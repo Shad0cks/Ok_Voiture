@@ -111,7 +111,9 @@ function ApplyRent() {
               First name*
             </label>
             <input
+              pattern="[a-zA-Z0-9\s]+"
               maxLength={12}
+              placeholder="Only alphanumeric and spaces are allowed"
               id="name"
               className="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"
               {...register("name")}
@@ -144,7 +146,9 @@ function ApplyRent() {
               Model*
             </label>
             <input
+              pattern="[a-zA-Z0-9\s]+"
               maxLength={25}
+              placeholder="Only alphanumeric and spaces are allowed"
               id="Model"
               {...register("Model")}
               name="Model"

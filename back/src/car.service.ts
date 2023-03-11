@@ -43,13 +43,21 @@ export class CarService {
     if (this.validateEmail(newInputCar.email))
       newRentCar.email = newInputCar.email;
     else throw new BadRequestException('Wrong email');
+    if (newInputCar.Year > 2100 || newInputCar.Year < 1500)
+      throw new BadRequestException('Wrong year');
     newRentCar.Year = newInputCar.Year;
     newRentCar.City = newInputCar.City;
     newRentCar.description = newInputCar.description;
     if (this.isImageUrlValid(newInputCar.carPic))
       newRentCar.carPic = newInputCar.carPic;
     else throw new BadRequestException('Picture failed to uplaod');
+    if (newInputCar.price > 10000 || newInputCar.price < 0)
+      throw new BadRequestException('Wrong price');
     newRentCar.price = newInputCar.price;
+    const wantedStart = moment(newInputCar.start);
+    const wantedEnd = moment(newInputCar.end);
+    if (wantedEnd.isBefore(wantedStart) || wantedEnd.isSame(wantedStart))
+      throw new BadRequestException('Wrong date');
     newRentCar.start = newInputCar.start;
     newRentCar.end = newInputCar.end;
     try {

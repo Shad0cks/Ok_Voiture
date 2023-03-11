@@ -1,8 +1,14 @@
-import { IsNotEmpty, IsDateString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsDateString,
+  IsNumber,
+  IsNumberString,
+} from 'class-validator';
 
 export class ReserveDateDTO {
   id: number;
 
+  @IsNumber()
   carId: number;
 
   @IsNotEmpty()
