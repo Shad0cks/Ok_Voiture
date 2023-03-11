@@ -102,6 +102,8 @@ export class CarService {
     const wantedEnd = moment(newbook.end);
     if (wantedStart.isSame(wantedEnd))
       throw new BadRequestException('Cannot book only one day');
+    if (wantedEnd.isBefore(wantedStart))
+      throw new BadRequestException('Date error');
     const limitStart = moment(rentCar.start).subtract(1, 'day');
     const limitEnd = moment(rentCar.end).subtract(1, 'day');
 
@@ -186,7 +188,7 @@ export class CarService {
       await this.booksRepository.delete(book);
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException('Friend not found');
+        throw new NotFoundException('Reservation not found');
       }
     }
   }
