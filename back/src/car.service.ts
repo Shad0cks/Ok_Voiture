@@ -56,7 +56,10 @@ export class CarService {
     newRentCar.price = newInputCar.price;
     const wantedStart = moment(newInputCar.start);
     const wantedEnd = moment(newInputCar.end);
-    if (wantedEnd.isBefore(wantedStart) || this.checkSame(wantedEnd, wantedStart))
+    if (
+      wantedEnd.isBefore(wantedStart) ||
+      this.checkSame(wantedEnd, wantedStart)
+    )
       throw new BadRequestException('Wrong date');
     newRentCar.start = newInputCar.start;
     newRentCar.end = newInputCar.end;
@@ -97,8 +100,7 @@ export class CarService {
     let rentCar: carDTO;
     try {
       rentCar = await this.getCarById(carID);
-      if (!rentCar)
-        throw new BadRequestException('Car not found');
+      if (!rentCar) throw new BadRequestException('Car not found');
     } catch (error) {
       throw new BadRequestException('Car not found');
     }
@@ -147,8 +149,7 @@ export class CarService {
     let rentCar: carDTO;
     try {
       rentCar = await this.getCarById(carID);
-      if (!rentCar)
-        throw new BadRequestException('Car not found');
+      if (!rentCar) throw new BadRequestException('Car not found');
     } catch (error) {
       throw new BadRequestException('Car not found');
     }
@@ -198,8 +199,7 @@ export class CarService {
       throw new ForbiddenException('access deny');
     try {
       const book = await this.GetBookById(bookID);
-      if (!book)
-        throw new NotFoundException('Reservation not found');
+      if (!book) throw new NotFoundException('Reservation not found');
       await this.booksRepository.delete(book);
     } catch (error) {
       if (error instanceof NotFoundException) {
