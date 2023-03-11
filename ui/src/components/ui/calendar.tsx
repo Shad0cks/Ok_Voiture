@@ -69,14 +69,22 @@ function OwnCalendar({
     if (!date || date.length !== 2) return;
 
     const cdate1 = moment(date[0]);
+
+    //set UTC to 0
+    cdate1.utcOffset("+0000");
     const cdate2 = moment(date[1]);
+
+    cdate2.utcOffset("+0000");
+    const dateISO0 = cdate1.utcOffset(0).toISOString();
+    const dateISO1 = cdate2.utcOffset(0).toISOString();
+
     // calcule si cdate1 et cdate2 sont les dates de debut ou de fin
     if (cdate1.isBefore(cdate2)) {
       addReservation(
         rentCar.id,
         {
-          start: cdate1.toDate(),
-          end: cdate2.toDate(),
+          start: dateISO0,
+          end: dateISO1,
           carId: rentCar.id,
           id: undefined,
         },
@@ -86,8 +94,8 @@ function OwnCalendar({
       addReservation(
         rentCar.id,
         {
-          start: cdate2.toDate(),
-          end: cdate1.toDate(),
+          start: dateISO1,
+          end: dateISO1,
           carId: rentCar.id,
           id: undefined,
         },

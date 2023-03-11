@@ -1,6 +1,6 @@
 export interface ReservedDateDTO {
   id: number | undefined;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   carId: number;
 }
