@@ -18,7 +18,7 @@ curl -X POST --header "Content-Type: application/json" --data '{ "name": "Chloe"
 
 echo '\n\n-Ajout des quelques reservations\n'
 
-curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-03-05T00:00:00.000Z", "end": "2023-03-10T00:00:00.000Z", "carId": 4 }' http://$serveurIP:8080/4/book
+curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-03-10T00:00:00.000Z", "end": "2023-03-15T00:00:00.000Z", "carId": 4 }' http://$serveurIP:8080/4/book
 
 curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-03-14T00:00:00.000Z", "end": "2023-03-30T00:00:00.000Z", "carId": 1 }' http://$serveurIP:8080/1/book
 curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-04-07T00:00:00.000Z", "end": "2023-04-10T00:00:00.000Z", "carId": 1 }' http://$serveurIP:8080/1/book

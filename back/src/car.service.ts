@@ -104,8 +104,8 @@ export class CarService {
       throw new BadRequestException('Cannot book only one day');
     if (wantedEnd.isBefore(wantedStart))
       throw new BadRequestException('Date error');
-    const limitStart = moment(rentCar.start).subtract(1, 'day');
-    const limitEnd = moment(rentCar.end).subtract(1, 'day');
+    const limitStart = moment(rentCar.start);
+    const limitEnd = moment(rentCar.end);
 
     for (let i = 0; i < books.length; i++) {
       const bookStart = moment(books[i].start);
@@ -140,14 +140,14 @@ export class CarService {
       throw new BadRequestException('Car not found');
     }
     const today = Date.now();
-    const limitStart = moment(rentCar.start).subtract(1, 'day');
-    const todayMo = moment(today).subtract(1, 'day');
+    const limitStart = moment(rentCar.start);
+    const todayMo = moment(today);
 
     if (limitStart.isAfter(todayMo)) return false;
 
     for (let i = 0; i < books.length; i++) {
-      const bookStart = moment(books[i].start).subtract(1, 'day');
-      const bookEnd = moment(books[i].end).subtract(1, 'day');
+      const bookStart = moment(books[i].start);
+      const bookEnd = moment(books[i].end);
       if (todayMo.isBetween(bookStart, bookEnd)) return false;
     }
     return true;
