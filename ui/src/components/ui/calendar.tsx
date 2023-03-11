@@ -69,22 +69,25 @@ function OwnCalendar({
     if (!date || date.length !== 2) return;
 
     const cdate1 = moment(date[0]);
-
-    //set UTC to 0
-    cdate1.utcOffset("+0000");
     const cdate2 = moment(date[1]);
 
-    cdate2.utcOffset("+0000");
-    const dateISO0 = cdate1.utcOffset(0).toISOString();
-    const dateISO1 = cdate2.utcOffset(0).toISOString();
+    //annule de changement de fuseau horaire et l'heure local
+    date[0].setHours(12);
+    date[1].setHours(12);
+    const date2 = new Date(
+      date[0].toISOString().split("T")[0] + "T00:00:00.000+00:00"
+    );
+    const date3 = new Date(
+      date[1].toISOString().split("T")[0] + "T00:00:00.000+00:00"
+    );
 
     // calcule si cdate1 et cdate2 sont les dates de debut ou de fin
     if (cdate1.isBefore(cdate2)) {
       addReservation(
         rentCar.id,
         {
-          start: dateISO0,
-          end: dateISO1,
+          start: date2.toISOString(),
+          end: date3.toISOString(),
           carId: rentCar.id,
           id: undefined,
         },
@@ -94,17 +97,14 @@ function OwnCalendar({
       addReservation(
         rentCar.id,
         {
-          start: dateISO1,
-          end: dateISO1,
+          start: date3.toISOString(),
+          end: date2.toISOString(),
           carId: rentCar.id,
           id: undefined,
         },
         snackbar
       );
-    } else {
-      return;
     }
-    setModalIsOpen(false);
   };
   return (
     <>
