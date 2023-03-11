@@ -24,7 +24,7 @@ curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023
 curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-04-07T00:00:00.000Z", "end": "2023-04-10T00:00:00.000Z", "carId": 1 }' http://$serveurIP:8080/1/book
 
 curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-04-01T00:00:00.000Z", "end": "2023-04-03T00:00:00.000Z", "carId": 2 }' http://$serveurIP:8080/2/book
-curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-04-03T00:00:00.000Z", "end": "2023-04-19T00:00:00.000Z", "carId": 2 }' http://$serveurIP:8080/2/book
+curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-04-04T00:00:00.000Z", "end": "2023-04-19T00:00:00.000Z", "carId": 2 }' http://$serveurIP:8080/2/book
 curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-04-20T00:00:00.000Z", "end": "2023-04-30T00:00:00.000Z", "carId": 2 }' http://$serveurIP:8080/2/book
 
 curl -X POST --header "Content-Type: application/json" --data '{  "start": "2023-03-14T00:00:00.000Z", "end": "2023-03-16T00:00:00.000Z", "carId": 6 }' http://$serveurIP:8080/6/book
@@ -57,7 +57,7 @@ curl -X POST --header "Content-Type: application/json" --data '{ "name": "Chloe"
 echo '\n\n-Image non valide\n'
 curl -X POST --header "Content-Type: application/json" --data '{ "name": "Chloe", "Model": "Toyota Yaris", "email": "Chloe@gmail.com", "Year": "2018", "City": "Rangiroa", "description": "Découvrez les merveilles de Rangiroa à bord de cette Toyota Yaris pratique et économique !", "carPic": "https://okvoiture.blob.core.windows.net/carspics/test10", "price": "30","start": "2023-03-02T00:00:00.000Z", "end": "2023-03-01T00:00:00.000Z", "creation_date": "2023-03-11T12:26:55.019Z"}' http://$serveurIP:8080/cars
 
-echo '\n\n-Date non valide\n'
+echo '\n\n-Year non valide\n'
 curl -X POST --header "Content-Type: application/json" --data '{ "name": "Chloe", "Model": "Toyota Yaris", "email": "Chloe@gmail.com", "Year": "salut", "City": "Rangiroa", "description": "Découvrez les merveilles de Rangiroa à bord de cette Toyota Yaris pratique et économique !", "carPic": "https://okvoiture.blob.core.windows.net/carspics/test10.jpg", "price": "30","start": "2023-03-02T00:00:00.000Z", "end": "2023-03-01T00:00:00.000Z", "creation_date": "2023-03-11T12:26:55.019Z"}' http://$serveurIP:8080/cars
 
 echo '\n\n---POST book--- :'
