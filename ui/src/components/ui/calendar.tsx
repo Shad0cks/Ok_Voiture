@@ -109,7 +109,7 @@ function OwnCalendar({
   };
   return (
     <>
-      <div>
+      <div className="notranslate" translate="no">
         <div className="card overflow-hidden">
           <div className="p-fluid grid formgrid overflow-hidden">
             <div className="field col-12 md:col-4 overflow-hidden">
