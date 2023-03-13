@@ -1,7 +1,7 @@
 
 # Ok voiture
 
-A platform allowing individuals to rent their cars among themselves.
+A platform allowing individuals to rent their cars among themselves. (Administration panel: /admin )
 
 
 ## Tech Stack
@@ -19,7 +19,7 @@ A platform allowing individuals to rent their cars among themselves.
 
 
 
-| location | Type     | Description                |
+| location | Name     | Description                |
 | :-------- | :------- | :------------------------- |
 | `./.env` | `POSTGRES_PASSWORD` | **Required**. Your Database Password |
 | `./back/.env` | `POSTGRES_PASSWORD` | **Required**. Your Database password |
